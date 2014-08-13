@@ -44,7 +44,10 @@ function displayVehicleInfo(info){
   $.each(info, function(key,val){
     var listItemHeading = '<h4 class="list-group-item-heading">' + key + '</h4>';
     $('#vehicle-info').append(listItemHeading);
-    var listItemText = '<p class="list-group-item-text">' + val + '</p>';
+    if (/(jpg|gif|png|JPG|GIF|PNG|JPEG|jpeg)$/.test(val))
+      var listItemText = '<img src=' + val + ' alt=' + key + '>'
+    else
+      var listItemText = '<p class="list-group-item-text">' + val + '</p>';
     $('#vehicle-info').append(listItemText);
   });
 }
