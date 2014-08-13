@@ -40,6 +40,7 @@ function getVehicleInfo(event){
 // Output Vehicle Info to site
 function displayVehicleInfo(info){
   console.log(info);
+  $('#vehicle-info').children().remove();
   $.each(info, function(key,val){
     var listItemHeading = '<h4 class="list-group-item-heading">' + key + '</h4>';
     $('#vehicle-info').append(listItemHeading);
