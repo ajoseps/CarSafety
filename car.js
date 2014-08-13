@@ -26,27 +26,23 @@ function formatRequestToAPI(param){
   var callback = '?callback=myCallback'
 
   switch(param){
-    case 'ModelYear':
-      break;
+    case 'VehicleDescription':
+      var model = $('#model-select').find(':selected').text();
+      apiParam = 'model/' + model + '/' + apiParam;
+    case 'Model':
+      var make = $('#make-select').find(':selected').text();
+      apiParam = 'make/' + make + '/' + apiParam;
     case 'Make':
       var year = $('#year-select').find(':selected').text();
-      apiParam = '/modelyear/' + year + '/';
-      break;
-    case 'Model':
-      var year = $('#year-select').find(':selected').text();
-      var make = $('#make-select').find(':selected').text();
-      apiParam = '/modelyear/' + year + '/make/' + make + '/';
-      break;
-    case 'VehicleDescription':
-      var year = $('#year-select').find(':selected').text();
-      var make = $('#make-select').find(':selected').text();
-      var model = $('#model-select').find(':selected').text();
-      apiParam = '/modelyear/' + year + '/make/' + make + '/model/' + model + '/';
+      apiParam = '/modelyear/' + year + '/' + apiParam;
+    case 'ModelYear':
       break;
     default:
       console.log('Wrong Parameter Specified');
   }
-  return apiURL+apiParam+outputFormat+callback;
+  var requestURL = apiURL+apiParam+outputFormat+callback;
+  console.log(requestURL);
+  return requestURL
 }
 
 function sendRequestToApi(requestURL, param, callback){
