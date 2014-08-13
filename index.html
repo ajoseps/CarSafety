@@ -17,30 +17,46 @@
     <![endif]-->
   </head>
   <body>
-    <div>
-      <form id="car-selection-form">
-          <!--Primary buttons with dropdown menu-->
-          <div class="btn-group">
-            <select id='year-select' class='form-control'>
-            </select>
-          </div>
-          <div class="btn-group">
-              <select id='make-select' class='form-control'>
-              </select>
-          </div>
-          <div class="btn-group">
-              <select id='model-select' class='form-control'>
-              </select>
-          </div>
-          <div class="btn-group">
-              <select id='specific-model-select' class='form-control'>
-              </select>
-          </div>
-           <div class="btn-group">
-              <button type='submit' id='get-info-button' class="btn btn-primary">Get Vehicle Info</button>
-          </div>
-      </form>
-    </div>
+    <div class="row">
+      <div class='col-md-3'>
+      </div>
+
+      <div class='col-md-6'>
+        <div class="page-header">
+          <h1>Check Yo Car!</h1>
+        </div>
+
+        <div>
+          <form id="car-selection-form">
+              <!--Primary buttons with dropdown menu-->
+                  <div class="btn-group btn-group-justified">
+                    <div class="btn-group">
+                      <select id='year-select' class='form-control'></select>
+                    </div>
+                    <div class="btn-group">
+                      <select id='make-select' class='form-control'></select>
+                    </div>
+                    <div class="btn-group">
+                      <select id='model-select' class='form-control'></select>
+                    </div>
+                    <div class="btn-group">
+                      <select id='specific-model-select' class='form-control'></select>
+                    </div>
+                    <div class="btn-group">
+                      <button type='submit' id='get-info-button' class="btn btn-primary">Get Vehicle Info</button>
+                    </div>
+                  </div>
+          </form>
+        </div>
+
+        <div class="list-group">
+          <a id='vehicle-info' href="#" class="list-group-item active">
+          </a>
+        </div>
+      </div>
+    <div class='col-md-3'>
+      </div>
+  </div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>

@@ -18,6 +18,7 @@ $('#make-select').change(modelSelect);
 
 $('#model-select').change(specificModelSelect);
 
+// Get Vehicle Information
 function getVehicleInfo(event){
   event.preventDefault();
 
@@ -31,8 +32,19 @@ function getVehicleInfo(event){
 
   var vehicleInfo = [];
   getVehicleInformation(requestURL, function(info){
-      vehicleInfo = info['Results'][0];
-      console.log(vehicleInfo);
+      vehicleInfo = info.Results[0];
+      displayVehicleInfo(vehicleInfo);
+  });
+}
+
+// Output Vehicle Info to site
+function displayVehicleInfo(info){
+  console.log(info);
+  $.each(info, function(key,val){
+    var listItemHeading = '<h4 class="list-group-item-heading">' + key + '</h4>';
+    $('#vehicle-info').append(listItemHeading);
+    var listItemText = '<p class="list-group-item-text">' + val + '</p>';
+    $('#vehicle-info').append(listItemText);
   });
 }
 
@@ -118,6 +130,7 @@ function createListItems(param,id){
   var param = param;
   var requestURL = formatRequestToAPI(param);
   sendRequestToApi(requestURL, param, function(dropdownItems){
+    $(id).children().remove();
       $.each(dropdownItems, function(index,value){
         $(id).append(value);
       });
