@@ -8,8 +8,8 @@ $('#model-select').click(modelSelect);
 
 $('#specific-model-select').click(specificModelSelect);
 
-$('#get-info-button').submit(function(event){
-  console.log($('input:first').val());
+$('#car-selection-form').submit(function(event){
+  getVehicleInfo(event);
 });
 
 $('#year-select').change(makeSelect);
@@ -18,6 +18,23 @@ $('#make-select').change(modelSelect);
 
 $('#model-select').change(specificModelSelect);
 
+function getVehicleInfo(event){
+  event.preventDefault();
+
+  // Formatting URL
+  var apiURL = 'http://www.nhtsa.gov/webapi/api/SafetyRatings';
+  var vehicleId = $('#specific-model-select').val();
+  var apiParam = '/VehicleId/' + vehicleId;
+  var outputFormat = '?format=json';
+  var callback = '?callback=myCallback';
+  var requestURL = apiURL+apiParam+outputFormat+callback;
+
+  var vehicleInfo = [];
+  getVehicleInformation(requestURL, function(info){
+      vehicleInfo = info['Results'][0];
+      console.log(vehicleInfo);
+  });
+}
 
 // List Item Creation Functions
 function yearSelect(){ createListItems('ModelYear','#year-select'); }
@@ -34,7 +51,7 @@ function formatRequestToAPI(param){
   var apiURL = 'http://www.nhtsa.gov/webapi/api/SafetyRatings';
   var apiParam = '';
   var outputFormat = '?format=json';
-  var callback = '?callback=myCallback'
+  var callback = '?callback=myCallback';
 
   switch(param){
     case 'VehicleDescription':
@@ -55,6 +72,17 @@ function formatRequestToAPI(param){
   return requestURL
 }
 
+function getVehicleInformation(requestURL, callback){
+  // Sending Request
+  $.ajax({
+    url: requestURL,
+    dataType: 'jsonp',
+    success: function(data){
+      callback(data);
+      }
+  });
+}
+
 // Sends formatted URL to NHTSA API and callback returns a list of items
 function sendRequestToApi(requestURL, param, callback){
   var listItems = [];
@@ -64,12 +92,21 @@ function sendRequestToApi(requestURL, param, callback){
     dataType: 'jsonp',
     success: function(data){
       $.each(data['Results'],function(){
+        var isCar = false; // For Obtaining Vehicle ID
+        var vehicledesc = '';
         $.each(this, function(k,v){
-          if(k == param){
-            var yearItem = '<option value='+v+'>'+v+'</option>';
-            listItems.push(yearItem);
-          }
-        });
+            if(param == 'VehicleDescription' && k == 'VehicleId'){
+              var yearItem = '<option value='+v+'>'+vehicledesc+'</option>';
+                listItems.push(yearItem);
+            }
+            else if(k == param && param == 'VehicleDescription'){
+                vehicledesc = v;
+            }
+            else if(k == param){
+                var yearItem = '<option value='+v+'>'+v+'</option>';
+                listItems.push(yearItem);
+            }
+          });
       });
       callback(listItems);
     }
