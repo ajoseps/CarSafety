@@ -1,8 +1,5 @@
 $( document ).ready(function() {
   yearSelect();
-  makeSelect();
-  modelSelect();
-  specificModelSelect();
 });
 
 $('#make-select').click(makeSelect);
@@ -52,7 +49,7 @@ function formatRequestToAPI(param){
   return apiURL+apiParam+outputFormat+callback;
 }
 
-function sendRequestToApi(callback, requestURL, param){
+function sendRequestToApi(requestURL, param, callback){
   var listItems = [];
   // Sending Request
   $.ajax({
@@ -64,134 +61,50 @@ function sendRequestToApi(callback, requestURL, param){
           if(k == param){
             var yearItem = '<option value='+v+'>'+v+'</option>';
             listItems.push(yearItem);
-            console.log(listItems.length);
           }
         });
       });
+      callback(listItems);
     }
   });
-  console.log(listItems.length);
-  return listItems;
 }
 
 function yearSelect(){
   var param = 'ModelYear';
   var requestURL = formatRequestToAPI(param);
-  var yearSelectDropdownItems = sendRequestToApi(requestURL, param);
-  $.each(yearSelectDropdownItems, function(index,value){
-    $('#year-select').append(value);
-  });
-  // // Formatting URL
-  // var apiURL = 'http://www.nhtsa.gov/webapi/api/SafetyRatings';
-  // var apiParam = '';
-  // var outputFormat = '?format=json';
-  // var callback = '?callback=myCallback'
-  // var requestURL = apiURL+apiParam+outputFormat+callback;
-
-  // // Sending Request
-  // $.ajax({
-  //   url: requestURL,
-  //   dataType: 'jsonp',
-  //   success: function(data){
-  //     $.each(data['Results'],function(){
-  //       $.each(this, function(k,v){
-  //         if(k == 'ModelYear'){
-  //           var yearItem = '<option value='+v+'>'+v+'</option>';
-  //           $('#year-select').append(yearItem);
-  //         }
-  //       });
-  //     });
-  //   }
-  // });
+  sendRequestToApi(requestURL, param, function(dropdownItems){
+      $.each(dropdownItems, function(index,value){
+        $('#year-select').append(value);
+      });
+    });
 }
 
 function makeSelect(){
-  // Formatting URL
-  var apiURL = 'http://www.nhtsa.gov/webapi/api/SafetyRatings';
-  var year = $('#year-select').find(':selected').text();
-  year = year !== '' ? year : '2015';
-  var apiParam = '/modelyear/' + year + '/';
-  var outputFormat = '?format=json';
-  var callback = '?callback=myCallback'
-  var requestURL = apiURL+apiParam+outputFormat+callback;
-
-  // Sending Request
-  $.ajax({
-    url: requestURL,
-    dataType: 'jsonp',
-    success: function(data){
-      $.each(data['Results'],function(){
-        $.each(this, function(k,v){
-          if(k == 'Make'){
-            var makeItem = '<option value='+v+'>'+v+'</option>';
-            $('#make-select').append(makeItem);
-          }
-        });
+  var param = 'Make';
+  var requestURL = formatRequestToAPI(param);
+  sendRequestToApi(requestURL, param, function(dropdownItems){
+      $.each(dropdownItems, function(index,value){
+        $('#make-select').append(value);
       });
-    }
-  });
+    });
 }
 
 function modelSelect(){
-  // Formatting URL
-  var apiURL = 'http://www.nhtsa.gov/webapi/api/SafetyRatings';
-  var year = $('#year-select').find(':selected').text();
-  year = year !== '' ? year : '2015';
-  var make = $('#make-select').find(':selected').text();
-  make = make !== '' ? make : 'Acura';
-  var apiParam = '/modelyear/' + year + '/make/' + make + '/';
-  var outputFormat = '?format=json';
-  var callback = '?callback=myCallback'
-  var requestURL = apiURL+apiParam+outputFormat+callback;
-
-  // Sending Request
-  $.ajax({
-    url: requestURL,
-    dataType: 'jsonp',
-    success: function(data){
-      $.each(data['Results'],function(){
-        $.each(this, function(k,v){
-          if(k == 'Model'){
-            var modelItem = '<option value='+v+'>'+v+'</option>';
-            $('#model-select').append(modelItem);
-          }
-        });
+  var param = 'Model';
+  var requestURL = formatRequestToAPI(param);
+  sendRequestToApi(requestURL, param, function(dropdownItems){
+      $.each(dropdownItems, function(index,value){
+        $('#model-select').append(value);
       });
-    }
-  });
+    });
 }
 
 function specificModelSelect(){
-  // Formatting URL
-  var apiURL = 'http://www.nhtsa.gov/webapi/api/SafetyRatings';
-  var year = $('#year-select').find(':selected').text();
-  year = year !== '' ? year : '2015';
-  var make = $('#make-select').find(':selected').text();
-  make = make !== '' ? make : 'Acura';
-  var model = $('#model-select').find(':selected').text();
-  model = model !== '' ? model : 'ILX';
-  var apiParam = '/modelyear/' + year + '/make/' + make + '/model/' + model + '/';
-  var outputFormat = '?format=json';
-  var callback = '?callback=myCallback'
-  var requestURL = apiURL+apiParam+outputFormat+callback;
-
-  // Sending Request
-  $.ajax({
-    url: requestURL,
-    dataType: 'jsonp',
-    success: function(data){
-      $.each(data['Results'],function(){
-        $.each(this, function(k,v){
-          var vID = '';
-          if(k == 'VehicleId'){
-            vID = v;
-          }
-          else if(k == 'VehicleDescription'){
-            var specificModelItem = '<option value='+vID+'>'+v+'</option>';
-            $('#specific-model-select').append(specificModelItem);
-          }
-        });
+  var param = 'VehicleDescription';
+  var requestURL = formatRequestToAPI(param);
+  sendRequestToApi(requestURL, param, function(dropdownItems){
+      $.each(dropdownItems, function(index,value){
+        $('#specific-model-select').append(value);
       });
-    }
-  });
+    });
 }
