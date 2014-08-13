@@ -18,6 +18,17 @@ $('#make-select').change(modelSelect);
 
 $('#model-select').change(specificModelSelect);
 
+
+// List Item Creation Functions
+function yearSelect(){ createListItems('ModelYear','#year-select'); }
+
+function makeSelect(){ createListItems('Make','#make-select'); }
+
+function modelSelect(){ createListItems('Model','#model-select'); }
+
+function specificModelSelect(){ createListItems('VehicleDescription','#specific-model-select'); }
+
+// Formats the Request URL to NHTSA API
 function formatRequestToAPI(param){
   // Formatting URL
   var apiURL = 'http://www.nhtsa.gov/webapi/api/SafetyRatings';
@@ -41,10 +52,10 @@ function formatRequestToAPI(param){
       console.log('Wrong Parameter Specified');
   }
   var requestURL = apiURL+apiParam+outputFormat+callback;
-  console.log(requestURL);
   return requestURL
 }
 
+// Sends formatted URL to NHTSA API and callback returns a list of items
 function sendRequestToApi(requestURL, param, callback){
   var listItems = [];
   // Sending Request
@@ -65,42 +76,13 @@ function sendRequestToApi(requestURL, param, callback){
   });
 }
 
-function yearSelect(){
-  var param = 'ModelYear';
+// Creates list items in html according to specified api param and html id
+function createListItems(param,id){
+  var param = param;
   var requestURL = formatRequestToAPI(param);
   sendRequestToApi(requestURL, param, function(dropdownItems){
       $.each(dropdownItems, function(index,value){
-        $('#year-select').append(value);
-      });
-    });
-}
-
-function makeSelect(){
-  var param = 'Make';
-  var requestURL = formatRequestToAPI(param);
-  sendRequestToApi(requestURL, param, function(dropdownItems){
-      $.each(dropdownItems, function(index,value){
-        $('#make-select').append(value);
-      });
-    });
-}
-
-function modelSelect(){
-  var param = 'Model';
-  var requestURL = formatRequestToAPI(param);
-  sendRequestToApi(requestURL, param, function(dropdownItems){
-      $.each(dropdownItems, function(index,value){
-        $('#model-select').append(value);
-      });
-    });
-}
-
-function specificModelSelect(){
-  var param = 'VehicleDescription';
-  var requestURL = formatRequestToAPI(param);
-  sendRequestToApi(requestURL, param, function(dropdownItems){
-      $.each(dropdownItems, function(index,value){
-        $('#specific-model-select').append(value);
+        $(id).append(value);
       });
     });
 }
